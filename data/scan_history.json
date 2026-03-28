@@ -1,0 +1,34 @@
+[
+  {
+    "id": "c2203033f5964c238e23fdfe8aac6c69",
+    "target_url": "http://demo.testfire.net/",
+    "started_at": "2026-03-28T14:34:19.058595+00:00",
+    "status": "completed",
+    "summary": {
+      "finding_count": 3,
+      "severity": {
+        "High": 1,
+        "Medium": 0,
+        "Low": 2
+      },
+      "urls_discovered": 40
+    },
+    "completed_at": "2026-03-28T14:37:01.588500+00:00"
+  },
+  {
+    "id": "589e13eb52794c28be4446934970f634",
+    "target_url": "https://www.youtube.com/",
+    "started_at": "2026-03-28T14:28:01.754728+00:00",
+    "status": "completed",
+    "summary": {
+      "finding_count": 9,
+      "severity": {
+        "High": 9,
+        "Medium": 0,
+        "Low": 0
+      },
+      "urls_discovered": 40
+    },
+    "completed_at": "2026-03-28T14:33:32.484001+00:00"
+  }
+]

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{% block title %}PTF{% endblock %} — Web Security Scanner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">Penetration Testing Framework</div>
+      <nav>
+        <a href="{{ url_for('main.index') }}">Dashboard</a>
+        <a href="{{ url_for('main.history') }}">History</a>
+        <a href="{{ url_for('main.login') }}">Login</a>
+        <a href="{{ url_for('main.logout') }}">Logout</a>
+      </nav>
+    </header>
+
+    <div class="banner">
+      <strong>Authorized use only.</strong>
+      This tool is for education and testing systems you own or have explicit permission to assess.
+      Misuse may be illegal. Use safe lab targets (e.g. local DVWA, WebGoat, testcontainers).
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block body %}{% endblock %}
+  </div>
+</body>
+</html>

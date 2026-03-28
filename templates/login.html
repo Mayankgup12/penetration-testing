@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+<h1>Login</h1>
+<p class="meta-line">Optional session login (default user is created on first run — see server log).</p>
+<form class="card" method="post" action="{{ url_for('main.login', next=next) }}" style="max-width:420px">
+  <p><label>Username<br/><input type="text" name="username" autocomplete="username" required/></label></p>
+  <p><label>Password<br/><input type="password" name="password" autocomplete="current-password" required/></label></p>
+  <button type="submit">Sign in</button>
+</form>
+{% endblock %}

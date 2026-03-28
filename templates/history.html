@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+{% block body %}
+<h1>Scan history</h1>
+<table class="data">
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>Target</th>
+      <th>Status</th>
+      <th>Summary</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in history %}
+    <tr>
+      <td class="url-break">{{ row.started_at }}</td>
+      <td class="url-break">{{ row.target_url }}</td>
+      <td><span class="status {{ row.status }}">{{ row.status }}</span></td>
+      <td>{{ row.summary }}</td>
+      <td>
+        <a href="{{ url_for('main.scan_status', scan_id=row.id) }}">Status</a>
+        {% if row.status == 'completed' %}
+        · <a href="{{ url_for('main.report', scan_id=row.id) }}">Report</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No history.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,9 @@
+data/scans/*
+!data/scans/.gitkeep
+data/logs/*.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.pdf

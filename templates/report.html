@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Report{% endblock %}
+{% block body %}
+{% set m = report.meta %}
+{% set recon = report.recon %}
+<h1>Scan report</h1>
+<p class="meta-line">Target: <span class="url-break">{{ m.target_url }}</span><br/>
+Completed: {{ m.completed_at }} · Scan ID: {{ m.scan_id }}</p>
+
+<div class="toolbar">
+  <a class="btn secondary" href="{{ url_for('main.export_pdf', scan_id=m.scan_id) }}">Export PDF</a>
+  <a class="btn secondary" href="{{ url_for('main.api_scan', scan_id=m.scan_id) }}">Raw JSON</a>
+  <a class="btn secondary" href="{{ url_for('main.index') }}">Dashboard</a>
+</div>
+
+<div class="card">
+  <h2>Reconnaissance</h2>
+  <p>Final URL: <span class="url-break">{{ recon.final_url }}</span><br/>
+  HTTP status: {{ recon.status_code }}<br/>
+  IP: {{ recon.ip_address or '—' }}<br/>
+  Server hint: {{ recon.server_hint or '—' }}</p>
+  {% if recon.ports %}
+  <h3>Port probe</h3>
+  <table class="data">
+    <thead><tr><th>Port</th><th>State</th></tr></thead>
+    <tbody>
+      {% for p in recon.ports %}
+      <tr><td>{{ p.port }}</td><td>{{ p.state }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <h3>Discovered URLs ({{ (recon.discovered_urls or [])|length }})</h3>
+  <ul>
+    {% for u in (recon.discovered_urls or [])[:50] %}
+    <li class="url-break">{{ u }}</li>
+    {% endfor %}
+    {% if (recon.discovered_urls or [])|length > 50 %}
+    <li>… truncated</li>
+    {% endif %}
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Findings</h2>
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Severity</th>
+        <th>URL</th>
+        <th>Evidence</th>
+        <th>Recommendation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in report.vulnerabilities %}
+      <tr>
+        <td>{{ v.type }}</td>
+        <td><span class="sev sev-{{ v.severity|lower }}">{{ v.severity }}</span></td>
+        <td class="url-break">{{ v.affected_url }}</td>
+        <td>{{ v.evidence }}</td>
+        <td>{{ v.recommendation }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No issues reported by automated checks.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

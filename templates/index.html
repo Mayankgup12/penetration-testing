@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+<h1>Dashboard</h1>
+<p class="meta-line">Run reconnaissance and light vulnerability checks against a target URL you control.</p>
+
+<div class="grid-stats">
+  <div class="stat"><div class="num">{{ stats.total_scans }}</div><div class="lbl">Total scans</div></div>
+  <div class="stat"><div class="num">{{ stats.completed }}</div><div class="lbl">Completed</div></div>
+  <div class="stat"><div class="num">{{ stats.failed }}</div><div class="lbl">Failed</div></div>
+  <div class="stat"><div class="num">{{ stats.active }}</div><div class="lbl">Active / queued</div></div>
+  <div class="stat"><div class="num">{{ stats.findings_high }}</div><div class="lbl">High findings (hist.)</div></div>
+  <div class="stat"><div class="num">{{ stats.findings_medium }}</div><div class="lbl">Medium</div></div>
+  <div class="stat"><div class="num">{{ stats.findings_low }}</div><div class="lbl">Low</div></div>
+</div>
+
+<div class="card">
+  <h2>New scan</h2>
+  <form class="inline-form" method="post" action="{{ url_for('main.start_scan') }}">
+    <input type="url" name="url" placeholder="https://example.local/page?id=1" required autocomplete="off"/>
+    <button type="submit">Start scan</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Recent activity</h2>
+  <table class="data">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Target</th>
+        <th>Status</th>
+        <th>Findings</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in history[:25] %}
+      <tr>
+        <td class="url-break"><code>{{ row.id[:8] }}…</code></td>
+        <td class="url-break">{{ row.target_url }}</td>
+        <td><span class="status {{ row.status }}">{{ row.status }}</span></td>
+        <td>{{ (row.summary or {}).get('finding_count', '—') }}</td>
+        <td>
+          {% if row.status == 'completed' %}
+          <a href="{{ url_for('main.report', scan_id=row.id) }}">Report</a>
+          {% else %}
+          <a href="{{ url_for('main.scan_status', scan_id=row.id) }}">Status</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No scans yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

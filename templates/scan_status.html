@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Scan {{ meta.id[:8] }}{% endblock %}
+{% block head %}
+  {% if meta.status in ('queued', 'running') %}
+  <meta http-equiv="refresh" content="3"/>
+  {% endif %}
+{% endblock %}
+{% block body %}
+<h1>Scan status</h1>
+<p class="meta-line">ID: <code>{{ meta.id }}</code></p>
+<p>Target: <span class="url-break">{{ meta.target_url }}</span></p>
+<p>Status: <span class="status {{ meta.status }}">{{ meta.status }}</span></p>
+{% if meta.get('error') %}
+<p class="flash danger">Error: {{ meta.error }}</p>
+{% endif %}
+
+<div class="toolbar">
+  {% if meta.status == 'completed' %}
+  <a class="btn" href="{{ url_for('main.report', scan_id=meta.id) }}">Open report</a>
+  <a class="btn secondary" href="{{ url_for('main.export_pdf', scan_id=meta.id) }}">Download PDF</a>
+  {% endif %}
+  <a class="btn secondary" href="{{ url_for('main.api_scan', scan_id=meta.id) }}">JSON API</a>
+</div>
+
+{% if data %}
+<p class="meta-line">Preview: {{ data.vulnerabilities|length }} findings, {{ (data.recon.discovered_urls or [])|length }} URLs crawled.</p>
+{% endif %}
+{% endblock %}
