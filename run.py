@@ -30,8 +30,8 @@ def main() -> None:
     cfg = load_config()
     a = cfg.get("app", {})
     srv = cfg.get("server", {})
-    host = os.environ.get("PTF_HOST", a.get("host", "127.0.0.1"))
-    port = int(os.environ.get("PTF_PORT", a.get("port", 5000)))
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", 10000))
     listen = f"{host}:{port}"
 
     if _use_dev_server():
